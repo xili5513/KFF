@@ -46,7 +46,6 @@ def create_auth(request):
                                 'amazing server made by Eddie please wait'})
 
 
-
 @csrf_exempt
 @api_view(["POST"])
 @permission_classes((AllowAny,))
@@ -86,15 +85,26 @@ class SnippetList(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
     def post(self, request, format = 'json'):
+        # data = JSONParser().parse(request)
         serializer = SnippetSerializer(data=request.data, many=True)
+        # rating = request.data.get("rating", "")
+        # product_name = request.data.get("product_name", "")
+        # product_category = request.data.get("product_category", "")
+        # accreditation = request.data.get("accreditation", "")
+        # availability = request.data.get("availability", "")
+        # image_label = request.data.get("image_label", "")
         if serializer.is_valid():
             serializer.save()
+            # models.Snippet.objects.create(
+            #     rating=rating, product_name=product_name, product_category=product_category,
+            #     accreditation=accreditation, availability=availability,image_label=image_label
+            # )
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_403_FORBIDDEN)
 
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+    # def perform_create(self, serializer):
+    #     serializer.save(owner=self.request.user)
 
 
 class SnippetDetail(generics.RetrieveUpdateDestroyAPIView):

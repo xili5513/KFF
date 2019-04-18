@@ -9,7 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ('id', 'username', 'email', 'gender', 'age', 'snippets')
+        fields = ('id', 'username', 'email', 'gender', 'age')
 
 
 class SnippetSerializer(serializers.ModelSerializer):
@@ -17,8 +17,8 @@ class SnippetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Snippet
         fields = ('id', 'rating', 'product_name', 'product_category', 'accreditation',
-                  'availability', 'location', 'address')
-        owner = serializers.ReadOnlyField(source='owner.username')
+                  'availability', 'image_label')
+        # owner = serializers.ReadOnlyField(source='owner.username')
 
 
 

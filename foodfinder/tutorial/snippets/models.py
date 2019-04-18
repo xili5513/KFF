@@ -36,9 +36,8 @@ class Snippet(models.Model):
     product_category = models.CharField(max_length=400, blank=True, default='')
     accreditation = models.CharField(max_length=400, blank=True, default='')
     availability = models.CharField(max_length=1000, blank=True, default='')
-    location = models.CharField(max_length=400, blank=True, default='')
-    address = models.CharField(max_length=400, blank=True, default='')
-    owner = models.ForeignKey('snippets.CustomUser', related_name='snippets', on_delete=models.CASCADE)
+    image_label = models.CharField(max_length=400, blank=True)
+    # owner = models.ForeignKey('snippets.CustomUser', related_name='snippets', on_delete=models.CASCADE)
 
     class Meta:
         ordering = ('created',)
