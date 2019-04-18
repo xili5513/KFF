@@ -1,4 +1,5 @@
 from rest_framework import permissions
+from snippets.models import CustomUser
 
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
