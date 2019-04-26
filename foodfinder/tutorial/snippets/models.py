@@ -31,7 +31,8 @@ class CustomUser(AbstractUser):
 
 class Snippet(models.Model):
     created = models.DateTimeField(auto_now_add=True)
-    rating = models.CharField(max_length=20, choices=RATING_CHOICES, default='Best', blank=True, null=True)
+    rating = models.CharField(max_length=400, choices=RATING_CHOICES, blank=True, default='')
+    # product_rating = models.CharField(max_length=400, blank=True, default='')
     product_name = models.CharField(max_length=400, blank=True, default='')
     product_category = models.CharField(max_length=400, blank=True, default='')
     accreditation = models.CharField(max_length=400, blank=True, default='')

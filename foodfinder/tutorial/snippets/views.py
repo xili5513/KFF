@@ -84,10 +84,12 @@ class SnippetList(generics.ListCreateAPIView):
     serializer_class = SnippetSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
-    def post(self, request, format = 'json'):
+    def post(self, request, format = "json"):
         # data = JSONParser().parse(request)
-        serializer = SnippetSerializer(data=request.data, many=True)
+        serializer = SnippetSerializer(data=request.data)
+        # print(request.data)
         # rating = request.data.get("rating", "")
+        # print('rating', rating)
         # product_name = request.data.get("product_name", "")
         # product_category = request.data.get("product_category", "")
         # accreditation = request.data.get("accreditation", "")
