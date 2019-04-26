@@ -43,7 +43,7 @@ def create_auth(request):
             return Response({'MSG': 'Successful'}, status=status.HTTP_201_CREATED)
     except Exception as e:
         return Response({'MSG': 'Sorry, account created failed, we are fixing the '
-                                'amazing server made by Eddie please wait'})
+                                'amazing server made by Eddie please wait'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @csrf_exempt
