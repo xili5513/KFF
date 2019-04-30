@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from snippets.models import Snippet
+from snippets.models import Report
 from django.contrib.auth.models import User
 from snippets.models import CustomUser
 
@@ -20,5 +21,11 @@ class SnippetSerializer(serializers.ModelSerializer):
                   'availability', 'image_label')
         # owner = serializers.ReadOnlyField(source='owner.username')
 
+
+class ReportSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Report
+        fields = ('id', 'PID', 'product_name', 'coordinate', 'location_description')
 
 

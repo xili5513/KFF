@@ -1,7 +1,9 @@
 from snippets.models import Snippet
+from snippets.models import Report
 # from snippets.models import Member
 from . import models
 from snippets.serializers import SnippetSerializer
+from snippets.serializers import ReportSerializer
 from rest_framework import generics
 # from django.contrib.auth.models import User
 from snippets.serializers import UserSerializer
@@ -113,3 +115,21 @@ class SnippetDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Snippet.objects.all()
     serializer_class = SnippetSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)
+
+
+class ReportList(generics.ListCreateAPIView):
+    queryset = Report.objects.all()
+    serializer_class = ReportSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)
+
+    def post(self, request, format = "json"):
+        serializer = SnippetSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            # models.Snippet.objects.create(
+            #     rating=rating, product_name=product_name, product_category=product_category,
+            #     accreditation=accreditation, availability=availability,image_label=image_label
+            # )
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_403_FORBIDDEN)

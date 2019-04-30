@@ -44,7 +44,12 @@ class Snippet(models.Model):
         ordering = ('created',)
 
 
-
+class Report(models.Model):
+    PID = models.ForeignKey(Snippet, on_delete=models.CASCADE)
+    # product_id = models.CharField(max_length=400, blank=True, default='')
+    product_name = models.CharField(max_length=400, blank=True, default='')
+    coordinate = models.CharField(max_length=400, blank=True, default='')
+    location_description = models.CharField(max_length=1000, blank=True, default='')
 # class Member(models.Model):
 #     created = models.DateTimeField(auto_now_add=True)
 #     username = models.CharField(max_length=20, primary_key=True, null=False)
