@@ -45,34 +45,37 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'rest_auth.registration',
-    'oauth2_provider',
-    'social_django',
-    'rest_framework_social_oauth2',
+    # 'oauth2_provider',
+    # 'provider',
+    # 'provider.oauth2',
+    # 'social_django',
 ]
 
 AUTH_USER_MODEL = "snippets.CustomUser"
 
 REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+        # 'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+    ),
     # 'DEFAULT_AUTHENTICATION_CLASSES': (
     #     'rest_framework.authentication.TokenAuthentication',
     # ),
-    'DEFAULT_AUTHENTICATION_CLASSES': (
+    # 'DEFAULT_AUTHENTICATION_CLASSES': (
         # 'oauth2_provider.ext.rest_framework.OAuth2Authentication',  # django-oauth-toolkit < 1.0.0
-        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',  # django-oauth-toolkit >= 1.0.0
-        'rest_framework_social_oauth2.authentication.SocialAuthentication',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated', )
+        # 'oauth2_provider.contrib.rest_framework.OAuth2Authentication',  # django-oauth-toolkit >= 1.0.0
+        # 'rest_framework_social_oauth2.authentication.SocialAuthentication',
+    # ),
 }
 
 AUTHENTICATION_BACKENDS = (
-   'rest_framework_social_oauth2.backends.DjangoOAuth2',
+   # 'rest_framework_social_oauth2.backends.DjangoOAuth2',
    'django.contrib.auth.backends.ModelBackend',
-   'social.backends.google.GoogleOAuth2',
+   # 'social.backends.google.GoogleOAuth2',
 )
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '975372144211-69jhnk6mc262rlo3rhoskut19kn3uc3d.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '6bt8KvZZZFriz6fP6gDBu1Uu'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = ''
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = ''
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -97,8 +100,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'social_django.context_processors.backends',
-                'social_django.context_processors.login_redirect',
+                # 'social_django.context_processors.backends',
+                # 'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -150,7 +153,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-
+# AUTHENTICATION_BACKENDS = ('apps.apployment_site.auth.CustomAuth',)
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
@@ -159,6 +162,6 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static/")
 ]
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 SITE_ID = 1

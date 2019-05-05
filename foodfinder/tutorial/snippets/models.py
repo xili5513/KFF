@@ -22,8 +22,8 @@ AGE_CHOICES = (
 
 
 class CustomUser(AbstractUser):
-    gender = models.CharField(max_length=20, choices=GENDER, default='Under 18')
-    age = models.CharField(max_length=20, choices=AGE_CHOICES, default='Male')
+    gender = models.CharField(max_length=20, choices=GENDER, default='Male')
+    age = models.CharField(max_length=20, choices=AGE_CHOICES, default='Under 18')
 
     def __str__(self):
         return self.username
@@ -45,8 +45,8 @@ class Snippet(models.Model):
 
 
 class Report(models.Model):
-    PID = models.ForeignKey(Snippet, on_delete=models.CASCADE)
-    # product_id = models.CharField(max_length=400, blank=True, default='')
+    # PID = models.ForeignKey(Snippet, on_delete=models.CASCADE)
+    product_id = models.CharField(max_length=400, blank=True, default='')
     product_name = models.CharField(max_length=400, blank=True, default='')
     coordinate = models.CharField(max_length=400, blank=True, default='')
     location_description = models.CharField(max_length=1000, blank=True, default='')

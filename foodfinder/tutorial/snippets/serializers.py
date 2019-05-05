@@ -26,6 +26,6 @@ class ReportSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Report
-        fields = ('id', 'PID', 'product_name', 'coordinate', 'location_description')
+        fields = ('id', 'product_id', 'product_name', 'coordinate', 'location_description')
 
 

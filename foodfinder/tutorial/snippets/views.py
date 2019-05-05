@@ -66,6 +66,50 @@ def login(request):
                     status=HTTP_200_OK)
 
 
+@csrf_exempt
+@api_view(["POST"])
+@permission_classes((AllowAny,))
+def report(request):
+    product_id = request.data.get("product_id")
+    product_name = request.data.get("product_name")
+    coordinate = request.data.get("coordinate")
+    location_description = request.data.get("location_description")
+    # serializer = ReportSerializer(data=request.data)
+    try:
+        if not product_id and not product_name and not coordinate and not location_description:
+            return Response({'error': 'Invalid Credentials'}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            # serializer.save()
+            models.Report.objects.create(
+                product_id=product_id, product_name=product_name, coordinate=coordinate, location_description=location_description
+            )
+            return Response({'msg': 'report successfully'} ,status=status.HTTP_201_CREATED)
+    except Exception as e:
+        return Response({'MSG': 'Sorry, report upload failed'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes((AllowAny,))
+def create_google_user(request):
+    username = request.data.get("username", "")
+    token = request.data.get("password", "")
+    gender = request.data.get("gender", "")
+    age = request.data.get("age", "")
+    email = request.data.get("email", "")
+    # serialized = UserSerializer(data=request.DATA)
+    try:
+        if not username and not token and not email and not gender and not age:
+            return Response({'error': 'Invalid Credentials'}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            models.CustomUser.objects.create_user(
+                username=username, password='', gender=gender, age=age, email=email
+            )
+            return Response({'MSG': 'Successful'}, status=status.HTTP_201_CREATED)
+    except Exception as e:
+        return Response({'MSG': "Account already exist, do not have to create"}, status=status.HTTP_202_ACCOUNT_EXIST)
+
+
 def home(request):
     return render(request, 'index.html')
 
@@ -84,7 +128,7 @@ class UserDetail(generics.RetrieveAPIView):
 class SnippetList(generics.ListCreateAPIView):
     queryset = Snippet.objects.all()
     serializer_class = SnippetSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
 
     def post(self, request, format = "json"):
         # data = JSONParser().parse(request)
@@ -120,16 +164,5 @@ class SnippetDetail(generics.RetrieveUpdateDestroyAPIView):
 class ReportList(generics.ListCreateAPIView):
     queryset = Report.objects.all()
     serializer_class = ReportSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
-    def post(self, request, format = "json"):
-        serializer = SnippetSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            # models.Snippet.objects.create(
-            #     rating=rating, product_name=product_name, product_category=product_category,
-            #     accreditation=accreditation, availability=availability,image_label=image_label
-            # )
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_403_FORBIDDEN)
