@@ -107,7 +107,19 @@ def create_google_user(request):
             )
             return Response({'MSG': 'Successful'}, status=status.HTTP_201_CREATED)
     except Exception as e:
-        return Response({'MSG': "Account already exist, do not have to create"}, status=status.HTTP_202_ACCOUNT_EXIST)
+        return Response({'MSG': "Account already exist, do not have to create"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes((AllowAny,))
+def auth_google_user(request):
+    username = request.data.get("username", "")
+    count = models.CustomUser.objects.filter(username=username).count()
+    if count == 0:
+        return Response({'MSG': 'Username is available'}, status=status.HTTP_201_CREATED)
+    else:
+        return Response({'MSG': 'Username is used by others'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 def home(request):
