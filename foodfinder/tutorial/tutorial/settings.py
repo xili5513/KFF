@@ -25,7 +25,7 @@ SECRET_KEY = '9p#$pd_hy4==!esc$ep4mlos42*tkrz&0)r7ql)rh6&r4-a#m7'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['ec2-52-64-193-227.ap-southeast-2.compute.amazonaws.com', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['ec2-13-239-136-215.ap-southeast-2.compute.amazonaws.com', 'ec2-52-64-193-227.ap-southeast-2.compute.amazonaws.com', '127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -161,7 +161,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static/")
 ]
-
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 SITE_ID = 1
