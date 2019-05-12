@@ -1,6 +1,9 @@
 from snippets.models import Snippet
 from snippets.models import Report
+from snippets.models import Statistics
+from snippets.serializers import StatisticsSerializer
 # from snippets.models import Member
+from django.db.models import Sum
 from . import models
 from snippets.serializers import SnippetSerializer
 from snippets.serializers import ReportSerializer
@@ -45,7 +48,7 @@ def create_auth(request):
             return Response({'MSG': 'Successful'}, status=status.HTTP_201_CREATED)
     except Exception as e:
         return Response({'MSG': 'Sorry, account created failed, we are fixing the '
-                                'amazing server made by Eddie please wait'}, status=status.HTTP_400_BAD_REQUEST)
+                                'amazing server made by Eddie please wait'}, gender=gender, age=age, status=status.HTTP_400_BAD_REQUEST)
 
 
 @csrf_exempt
@@ -62,7 +65,10 @@ def login(request):
         return Response({'error': 'Invalid Credentials'},
                         status=HTTP_404_NOT_FOUND)
     token, _ = Token.objects.get_or_create(user=user)
-    return Response({'token': token.key},
+    user_info = models.CustomUser.objects.get(username=username)
+    age = user_info.age
+    gender = user_info.gender
+    return Response({'token': token.key, 'age': age, 'gender': gender},
                     status=HTTP_200_OK)
 
 
@@ -83,7 +89,7 @@ def report(request):
             models.Report.objects.create(
                 product_id=product_id, product_name=product_name, coordinate=coordinate, location_description=location_description
             )
-            return Response({'msg': 'report successfully'} ,status=status.HTTP_201_CREATED)
+            return Response({'msg': 'report successfully'}, status=status.HTTP_201_CREATED)
     except Exception as e:
         return Response({'MSG': 'Sorry, report upload failed'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -105,7 +111,7 @@ def create_google_user(request):
             models.CustomUser.objects.create_user(
                 username=username, password='', gender=gender, age=age, email=email
             )
-            return Response({'MSG': 'Successful'}, status=status.HTTP_201_CREATED)
+            return Response({'MSG': 'Successful', }, status=status.HTTP_201_CREATED)
     except Exception as e:
         return Response({'MSG': "Account already exist, do not have to create"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -116,14 +122,65 @@ def create_google_user(request):
 def auth_google_user(request):
     username = request.data.get("username", "")
     count = models.CustomUser.objects.filter(username=username).count()
+    user_info = models.CustomUser.objects.get(username=username)
+    age = user_info.age
+    gender = user_info.gender
     if count == 0:
         return Response({'MSG': 'Username is available'}, status=status.HTTP_201_CREATED)
     else:
-        return Response({'MSG': 'Username is used by others'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'MSG': 'Username is used by others', 'age': age, 'gender': gender},
+                        status=status.HTTP_400_BAD_REQUEST)
+
+
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes((AllowAny,))
+def data_statistics(request):
+    brand_name = request.data.get("brand_name", "")
+    user_age = request.data.get("user_age", "")
+    user_gender = request.data.get("user_gender", "")
+    product_type = request.data.get("product_type", "")
+    # count = models.CustomUser.objects.filter(username=username).count()
+    if not brand_name and not user_age and not user_gender and not product_type:
+        return Response({'error': 'Invalid Credentials'}, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        # serializer.save()
+        models.Statistics.objects.create(
+            brand_name=brand_name, user_age=user_age, user_gender=user_gender, product_type=product_type
+        )
+        return Response({'msg': 'data collect successfully'}, status=status.HTTP_201_CREATED)
 
 
 def home(request):
-    return render(request, 'index.html')
+    from django.core import serializers
+    age_result_1 = list(models.Statistics.objects.filter(user_age='Under 18').values("brand_name").annotate(
+        total_num=Sum("num")).all().order_by('-total_num')[:5])
+    age_result_2 = list(models.Statistics.objects.filter(user_age='18-29').values("brand_name").annotate(
+        total_num=Sum("num")).all().order_by('-total_num')[:5])
+    age_result_3 = list(models.Statistics.objects.filter(user_age='30-39').values("brand_name").annotate(
+        total_num=Sum("num")).all().order_by('-total_num')[:5])
+    age_result_4 = list(models.Statistics.objects.filter(user_age='40-49').values("brand_name").annotate(
+        total_num=Sum("num")).all().order_by('-total_num')[:5])
+    age_result_5 = list(models.Statistics.objects.filter(user_age='50-59').values("brand_name").annotate(
+        total_num=Sum("num")).all().order_by('-total_num')[:5])
+    age_result_6 = list(models.Statistics.objects.filter(user_age='60+').values("brand_name").annotate(
+        total_num=Sum("num")).all().order_by('-total_num')[:5])
+    # age_result_all = list(models.Statistics.objects.values())
+    # data = {'data': age_result_all}
+    data = {'data_1': age_result_1, 'data_2': age_result_2, 'data_3': age_result_3,'data_4': age_result_4,
+            'data_5': age_result_5, 'data_6': age_result_6}
+    # result = json.dumps(models.Statistics.objects.filter(user_age='60+').values("brand_name").annotate(
+    #     total_num=Sum("num")).all().order_by('-total_num')[:5])
+    return render(request, 'index.html', data)
+
+
+def gender(request):
+    gender_result_1 = list(models.Statistics.objects.filter(user_gender='Male').values("brand_name").annotate(
+        total_num=Sum("num")).all().order_by('-total_num')[:5])
+    gender_result_2 = list(models.Statistics.objects.filter(user_gender='Female').values("brand_name").annotate(
+        total_num=Sum("num")).all().order_by('-total_num')[:5])
+    data = {'data_1': gender_result_1, 'data_2': gender_result_2}
+    return render(request, 'second.html', data)
 
 
 # @permission_classes((AllowAny,))
@@ -170,7 +227,7 @@ class SnippetList(generics.ListCreateAPIView):
 class SnippetDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Snippet.objects.all()
     serializer_class = SnippetSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
 
 
 class ReportList(generics.ListCreateAPIView):
@@ -178,3 +235,8 @@ class ReportList(generics.ListCreateAPIView):
     serializer_class = ReportSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
+
+class StatisticsList(generics.ListCreateAPIView):
+    queryset = Statistics.objects.all()
+    serializer_class = StatisticsSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)

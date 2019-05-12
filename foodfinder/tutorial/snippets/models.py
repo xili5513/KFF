@@ -50,6 +50,14 @@ class Report(models.Model):
     product_name = models.CharField(max_length=400, blank=True, default='')
     coordinate = models.CharField(max_length=400, blank=True, default='')
     location_description = models.CharField(max_length=1000, blank=True, default='')
+
+
+class Statistics(models.Model):
+    brand_name = models.CharField(max_length=400, blank=True, default='')
+    user_age = models.CharField(max_length=400, blank=True, default='')
+    user_gender = models.CharField(max_length=400, blank=True, default='')
+    product_type = models.CharField(max_length=400, blank=True, default='')
+    num = models.IntegerField(blank=True, default=1)
 # class Member(models.Model):
 #     created = models.DateTimeField(auto_now_add=True)
 #     username = models.CharField(max_length=20, primary_key=True, null=False)
