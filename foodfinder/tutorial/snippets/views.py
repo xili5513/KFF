@@ -80,6 +80,8 @@ def report(request):
     product_name = request.data.get("product_name")
     coordinate = request.data.get("coordinate")
     location_description = request.data.get("location_description")
+    accreditation = request.data.get("accreditation")
+    email = request.data.get("email")
     # serializer = ReportSerializer(data=request.data)
     try:
         if not product_id and not product_name and not coordinate and not location_description:
@@ -87,7 +89,8 @@ def report(request):
         else:
             # serializer.save()
             models.Report.objects.create(
-                product_id=product_id, product_name=product_name, coordinate=coordinate, location_description=location_description
+                product_id=product_id, product_name=product_name, coordinate=coordinate,
+                location_description=location_description, accreditation=accreditation, email=email
             )
             return Response({'msg': 'report successfully'}, status=status.HTTP_201_CREATED)
     except Exception as e:
@@ -122,12 +125,12 @@ def create_google_user(request):
 def auth_google_user(request):
     username = request.data.get("username", "")
     count = models.CustomUser.objects.filter(username=username).count()
-    user_info = models.CustomUser.objects.get(username=username)
-    age = user_info.age
-    gender = user_info.gender
     if count == 0:
         return Response({'MSG': 'Username is available'}, status=status.HTTP_201_CREATED)
     else:
+        user_info = models.CustomUser.objects.get(username=username)
+        age = user_info.age
+        gender = user_info.gender
         return Response({'MSG': 'Username is used by others', 'age': age, 'gender': gender},
                         status=status.HTTP_400_BAD_REQUEST)
 
@@ -163,7 +166,7 @@ def home(request):
         total_num=Sum("num")).all().order_by('-total_num')[:5])
     age_result_5 = list(models.Statistics.objects.filter(user_age='50-59').values("brand_name").annotate(
         total_num=Sum("num")).all().order_by('-total_num')[:5])
-    age_result_6 = list(models.Statistics.objects.filter(user_age='60+').values("brand_name").annotate(
+    age_result_6 = list(models.Statistics.objects.filter(user_age='60 ').values("brand_name").annotate(
         total_num=Sum("num")).all().order_by('-total_num')[:5])
     # age_result_all = list(models.Statistics.objects.values())
     # data = {'data': age_result_all}
@@ -181,6 +184,25 @@ def gender(request):
         total_num=Sum("num")).all().order_by('-total_num')[:5])
     data = {'data_1': gender_result_1, 'data_2': gender_result_2}
     return render(request, 'second.html', data)
+
+
+def user_statistics(request):
+    from django.core import serializers
+    user_age_1 = models.CustomUser.objects.filter(age='Under 18').count()
+    user_age_2 = models.CustomUser.objects.filter(age='18-29').count()
+    user_age_3 = models.CustomUser.objects.filter(age='30-39').count()
+    user_age_4 = models.CustomUser.objects.filter(age='40-49').count()
+    user_age_5 = models.CustomUser.objects.filter(age='50-59').count()
+    user_age_6 = models.CustomUser.objects.filter(age='60 ').count()
+    user_gender_1 = models.CustomUser.objects.filter(gender='Male').count()
+    user_gender_2 = models.CustomUser.objects.filter(gender='Female').count()
+    # age_result_all = list(models.Statistics.objects.values())
+    # data = {'data': age_result_all}
+    data = {'data_1': user_age_1, 'data_2': user_age_2, 'data_3': user_age_3, 'data_4': user_age_4,
+            'data_5': user_age_5, 'data_6': user_age_6, 'data_7': user_gender_1, 'data_8': user_gender_2}
+    # result = json.dumps(models.Statistics.objects.filter(user_age='60+').values("brand_name").annotate(
+    #     total_num=Sum("num")).all().order_by('-total_num')[:5])
+    return render(request, 'third.html', data)
 
 
 # @permission_classes((AllowAny,))

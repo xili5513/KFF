@@ -7,7 +7,7 @@ from snippets.models import CustomUser
 
 
 class UserSerializer(serializers.ModelSerializer):
-    snippets = serializers.PrimaryKeyRelatedField(many=True, queryset=Snippet.objects.all())
+#    snippets = serializers.PrimaryKeyRelatedField(many=True, queryset=Snippet.objects.all())
 
     class Meta:
         model = CustomUser
@@ -27,7 +27,7 @@ class ReportSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Report
-        fields = ('id', 'product_id', 'product_name', 'coordinate', 'location_description')
+        fields = ('id', 'product_id', 'product_name', 'coordinate', 'location_description', 'accreditation', 'email')
 
 
 class StatisticsSerializer(serializers.ModelSerializer):

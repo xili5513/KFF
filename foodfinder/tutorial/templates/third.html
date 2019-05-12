@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 
-  <title>Second page - HTML Starter Project</title>
+  <title>Third page - HTML Starter Project</title>
 
   <link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin" rel="stylesheet" type="text/css">
   <link href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css">
@@ -38,11 +38,11 @@
       <li class="px-nav-item">
         <a href="/products/"><i class="px-nav-icon ion-star"></i><span class="px-nav-label">Age Statistics</span></a>
       </li>
-      <li class="px-nav-item active">
-        <a href="/products-v1/"><i class="px-nav-icon ion-home"></i><span class="px-nav-label">Gender Statistics</span></a>
-      </li>
       <li class="px-nav-item">
-        <a href="/products-v2/"><i class="px-nav-icon ion-star"></i><span class="px-nav-label">User Statistics</span></a>
+        <a href="/products-v1/"><i class="px-nav-icon ion-star"></i><span class="px-nav-label">Gender Statistics</span></a>
+      </li>
+      <li class="px-nav-item active">
+        <a href="/products-v2/"><i class="px-nav-icon ion-home"></i><span class="px-nav-label">User Statistics</span></a>
       </li>
     </ul>
   </nav>
@@ -79,10 +79,10 @@
   <!-- Content -->
   <div class="px-content">
     <div class="page-header">
-      <h1><span class="text-muted font-weight-light"></span>Gender Statistics</h1>
+      <h1><span class="text-muted font-weight-light"></span>Users Statistics</h1>
     </div>
-      <button class="gender_btn" id="gender1_button">Male</button>
-      <button class="gender_btn" id="gender2_button">Female</button>
+      <button class="gender_btn" id="gender2_button">User age</button>
+      <button class="gender_btn" id="gender_button">User gender</button>
       <div class="page1 page" id="gender_chart"><h1 class="h2" id="test"></h1></div>
   </div>
 
@@ -120,27 +120,33 @@ google.charts.setOnLoadCallback(drawChart);
 </script>
   <script>
 $(document).ready(function () {
-  var gender_result1 = {{ data_1|safe }};
-  var gender_result2 = {{ data_2|safe }};
-  $("#gender1_button").click(function (event) {
-      event.preventDefault();
-      var data = new Array();
-      data[0] = ['Product name','Click number'];
-      for(i=0;i<gender_result1.length;i++){
-        	  data[i+1] = [gender_result1[i].brand_name, parseInt(gender_result1[i].total_num)];
-        	  {#data[i+1] = age_result2[i].total_num;#}
-      }
-      draw_chart(data);
-  });
+  var result1 = {{ data_1|safe }};
+  var result2 = {{ data_2|safe }};
+  var result3 = {{ data_3|safe }};
+  var result4 = {{ data_4|safe }};
+  var result5 = {{ data_5|safe }};
+  var result6 = {{ data_6|safe }};
+  var result7 = {{ data_7|safe }};
+  var result8 = {{ data_8|safe }};
   $("#gender2_button").click(function (event) {
       event.preventDefault();
       var data = new Array();
       data[0] = ['Product name','Click number'];
-      for(i=0;i<gender_result2.length;i++){
-        	  data[i+1] = [gender_result2[i].brand_name, parseInt(gender_result2[i].total_num)];
-        	  {#data[i+1] = age_result2[i].total_num;#}
-      }
+      data[1] = ['Under 18',result1];
+      data[2] = ['18-29',result2];
+      data[3] = ['30-39',result3];
+      data[4] = ['40-49',result4];
+      data[5] = ['50-59',result5];
+      data[6] = ['60+',result6];
       draw_chart(data);
+  });
+    $("#gender_button").click(function (event) {
+      event.preventDefault();
+      var data = new Array();
+      data[0] = ['Gender','Number'];
+      data[1] = ['Male',result7];
+      data[2] = ['Female',result8];
+      draw_pie(data);
   });
 });
 
@@ -153,6 +159,19 @@ function draw_chart(data) {
         height:600
     };
     var chart = new google.visualization.ColumnChart(document.getElementById("gender_chart"));
+
+    chart.draw(real_data, options);
+}
+
+function draw_pie(data) {
+    var real_data = google.visualization.arrayToDataTable(data);
+    var options = {
+        title: 'Distribution of Male and Female',
+        legend: { position: 'bottom'},
+        width:800,
+        height:600
+    };
+    var chart = new google.visualization.PieChart(document.getElementById("gender_chart"));
 
     chart.draw(real_data, options);
 }

@@ -14,6 +14,7 @@ urlpatterns = [
     path('products/data/<int:pk>/', views.SnippetDetail.as_view()),
     path('products/', views.home, name='home'),
     path('products-v1/', views.gender, name='gender'),
+    path('products-v2/', views.user_statistics, name='user_statistics'),
     path('report/data', views.ReportList.as_view()),
     path('google_login/', views.create_google_user),
     path('google_auth/', views.auth_google_user),

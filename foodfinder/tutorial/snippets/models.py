@@ -50,6 +50,8 @@ class Report(models.Model):
     product_name = models.CharField(max_length=400, blank=True, default='')
     coordinate = models.CharField(max_length=400, blank=True, default='')
     location_description = models.CharField(max_length=1000, blank=True, default='')
+    accreditation = models.CharField(max_length=1000, blank=True, default='')
+    email = models.CharField(max_length=1000, blank=True, default='')
 
 
 class Statistics(models.Model):
