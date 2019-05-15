@@ -135,7 +135,7 @@ $(document).ready(function () {
   $("#age1_button").click(function (event) {
       event.preventDefault();
       var data = new Array();
-      data[0] = ['Product name','Click number'];
+      data[0] = ['Product name','Number of Product Searched'];
       for(i=0;i<age_result1.length;i++){
         	  data[i+1] = [age_result1[i].brand_name, parseInt(age_result1[i].total_num)];
         	  {#data[i+1] = age_result2[i].total_num;#}
@@ -145,7 +145,7 @@ $(document).ready(function () {
   $("#age2_button").click(function (event) {
       event.preventDefault();
       var data = new Array();
-      data[0] = ['Product name','Click number'];
+      data[0] = ['Product name','Number of Product Searched'];
       for(i=0;i<age_result2.length;i++){
         	  data[i+1] = [age_result2[i].brand_name, parseInt(age_result2[i].total_num)];
         	  {#data[i+1] = age_result2[i].total_num;#}
@@ -155,7 +155,7 @@ $(document).ready(function () {
   $("#age3_button").click(function (event) {
       event.preventDefault();
       var data = new Array();
-      data[0] = ['Product name','Click number'];
+      data[0] = ['Product name','Number of Product Searched'];
       for(i=0;i<age_result3.length;i++){
         	  data[i+1] = [age_result3[i].brand_name, parseInt(age_result3[i].total_num)];
         	  {#data[i+1] = age_result2[i].total_num;#}
@@ -166,7 +166,7 @@ $(document).ready(function () {
   $("#age4_button").click(function (event) {
       event.preventDefault();
       var data = new Array();
-      data[0] = ['Product name','Click number'];
+      data[0] = ['Product name','Number of Product Searched'];
       for(i=0;i<age_result4.length;i++){
         	  data[i+1] = [age_result4[i].brand_name, parseInt(age_result4[i].total_num)];
         	  {#data[i+1] = age_result2[i].total_num;#}
@@ -176,7 +176,7 @@ $(document).ready(function () {
   $("#age5_button").click(function (event) {
       event.preventDefault();
       var data = new Array();
-      data[0] = ['Product name','Click number'];
+      data[0] = ['Product name','Number of Product Searched'];
       for(i=0;i<age_result5.length;i++){
         	  data[i+1] = [age_result5[i].brand_name, parseInt(age_result5[i].total_num)];
         	  {#data[i+1] = age_result2[i].total_num;#}
@@ -187,7 +187,7 @@ $(document).ready(function () {
     $("#age6_button").click(function (event) {
       event.preventDefault();
       var data = new Array();
-      data[0] = ['Product name','Click number'];
+      data[0] = ['Product name','Number of Product Searched'];
       for(i=0;i<age_result6.length;i++){
         	  data[i+1] = [age_result6[i].brand_name, parseInt(age_result6[i].total_num)];
         	  {#data[i+1] = age_result2[i].total_num;#}
@@ -200,7 +200,7 @@ $(document).ready(function () {
 function draw_chart(data) {
     var real_data = google.visualization.arrayToDataTable(data);
     var options = {
-        title: 'Kingder Food Finder',
+        title: 'TOP 5 Searched Commomly Products',
         legend: { position: 'bottom'},
         width:1100,
         height:600
